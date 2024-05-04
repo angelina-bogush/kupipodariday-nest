@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { IsString, MinLength, IsEmail, MaxLength, minLength, IsNumber, IsDecimal, IsUrl, IsArray } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne} from 'typeorm';
+import {  IsNumber, IsDecimal } from 'class-validator';
+import { Wish } from 'src/wishes/wish.entity';
+import { User } from 'src/users/user.entity';
 
 @Entity()
 
@@ -7,11 +9,13 @@ export class Offer {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @ManyToOne(() => User, (user) => user.offers)
     @Column()
-    user: string
+    user: User
 
+    @ManyToOne(() => Wish, (wish) => wish.offers)
     @Column()
-    item: string
+    item: Wish
 
     @Column('decimal', { precision: 10, scale: 2 })
     @IsNumber()

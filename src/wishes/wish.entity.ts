@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 import { IsString, MinLength, IsEmail, MaxLength, minLength, IsNumber, IsDecimal, IsUrl, IsArray } from 'class-validator';
+import { User } from 'src/users/user.entity';
+import { Offer } from 'src/offers/offer.entity';
 
 @Entity()
 export class Wish {
@@ -12,10 +14,11 @@ export class Wish {
     name: string
 
     @Column()
-    @IsString()
+    @IsUrl()
     link: string
 
     @Column()
+    @IsUrl()
     image: string
 
     @Column('decimal', { precision: 10, scale: 2 })
@@ -24,27 +27,24 @@ export class Wish {
     price: number;
 
 
-    @Column()
-    @Column('decimal', { precision: 10, scale: 2 })
+    @Column('decimal', { precision: 10, scale: 2, default: 0 })
     @IsNumber()
     @IsDecimal({ decimal_digits: '2' })
     raised: number
 
-    @Column()
-    @IsString()
-    owner: string
+    @ManyToOne(() => User, (user) => user.wishes)
+    owner: User;
 
     @Column({ length: 1024 })
     @MinLength(1)
     @MaxLength(1024)
     description: string
 
-    @Column('simple-array')
-    @IsArray()
-    offers: string[];
+    @OneToMany(() => Offer, (offer) => offer.item)
+    offers: Offer[];
 
 
-    @Column('int')
+    @Column({type:'int', default: 0})
     copied: number;
 
 
