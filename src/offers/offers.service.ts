@@ -5,6 +5,7 @@ import { Offer } from './offer.entity';
 import { UsersService } from 'src/users/users.service';
 import { WishesService } from 'src/wishes/wishes.service';
 import { CreateOfferDto } from './dto/createOfferDto';
+import { UpdateWishDto } from 'src/wishes/dto/updateWishDto';
 
 
 
@@ -35,7 +36,7 @@ export class OffersService {
 
         await this.wishesService.update(createOfferDto.item, {
             raised: Number(wish.raised) + Number(createOfferDto.amount),
-        });
+        } as UpdateWishDto);
         const newOffer = this.offerRepository.create({
             ...createOfferDto,
             user,

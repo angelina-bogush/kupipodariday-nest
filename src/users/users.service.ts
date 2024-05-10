@@ -24,7 +24,7 @@ export class UsersService {
       ],
     });
     if (user.length) {
-      return new ConflictException('Пользователь с таким email или username уже зарегистрирован')
+      throw new ConflictException('Пользователь с таким email или username уже зарегистрирован')
     }
     createUserDTO.password = await bcrypt.hash(
       String(createUserDTO.password),

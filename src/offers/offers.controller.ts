@@ -13,8 +13,9 @@ import {
   import { IUserRequest } from 'src/users/users.controller';
 
  import { Offer } from './offer.entity';
+ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
   
-//   @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Controller('offers')
   export class OffersController {
     constructor(private readonly offersService: OffersService) {}
