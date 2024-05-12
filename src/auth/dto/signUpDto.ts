@@ -9,13 +9,14 @@ export class SignUpDto {
   @ValidateIf((dto) => dto.about !== '')
   @Length(2, 200)
   about: string;
-
-  @IsUrl()
-  avatar: string;
-
+  
   @IsEmail()
   email: string;
 
   @IsString()
   password: string;
+
+  @IsUrl()
+  avatar: string;
+
 }
