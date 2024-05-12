@@ -10,7 +10,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  signup(@Body()signUpDto: SignUpDto): Promise<TUser> {
+  signup(@Body() signUpDto: SignUpDto): Promise<TUser> {
     return this.authService.signup(signUpDto);
   }
 

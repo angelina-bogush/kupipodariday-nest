@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, NotFoundException, ForbiddenException} from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Wish } from './wish.entity';
 import { Repository, In } from 'typeorm';
@@ -11,7 +15,7 @@ export class WishesService {
     @InjectRepository(Wish)
     private readonly wishRepository: Repository<Wish>,
     private readonly userService: UsersService,
-  ) { }
+  ) {}
   async create(id: number, createWishDto: CreateWishDto): Promise<Wish> {
     const user = await this.userService.findUserById(id);
     return this.wishRepository.save({
@@ -24,6 +28,7 @@ export class WishesService {
       where: {
         id,
       },
+      relations: ['owner', 'offers', 'offers.user'],
     });
     if (!wish) throw new BadRequestException('Не найдено');
     return wish;
@@ -32,7 +37,7 @@ export class WishesService {
     return this.wishRepository.find({
       order: { copied: 'DESC' },
       take: records,
-      relations: ['owner', 'offers']
+      relations: ['owner', 'offers'],
     });
   }
   async findLast(records: number): Promise<Wish[]> {
@@ -49,12 +54,9 @@ export class WishesService {
       throw new NotFoundException('Такого подарка не существует');
     }
     if (updateWishDto.price && wish.offers.length > 0)
-      throw new BadRequestException(
-        'Невозможно редактировать',
-      );
+      throw new BadRequestException('Невозможно редактировать');
     return await this.wishRepository.update(wishId, updateWishDto);
   }
-
 
   async deleteOne(wishId: number, userId: number): Promise<Wish> {
     const wish = await this.findOne(wishId);
@@ -66,8 +68,8 @@ export class WishesService {
     await this.wishRepository.delete(wishId);
     return wish;
   }
-  async copyOne(wishId: number, userId: number) {
-    const { name, link, image, price, description, copied, id, ...data } = await this.findOne(wishId);
+  async copy(wishId: number, userId: number) {
+    const { id, copied, ...data } = await this.findOne(wishId);
     const owner = await this.userService.findUserById(userId);
 
     await this.wishRepository.update(id, { copied: copied + 1 });

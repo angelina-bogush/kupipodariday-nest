@@ -1,4 +1,9 @@
-import { Injectable, Logger, ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,12 +11,12 @@ import { User } from './user.entity';
 import { CreateUserDto } from './dto/createUserDto';
 import { UpdateUserDto } from './dto/updateUserDto';
 
-
 @Injectable()
 export class UsersService {
-
-  constructor(@InjectRepository(User)
-  private userRepository: Repository<User>) { }
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
 
   private readonly logger: Logger;
   private readonly salt = 10;
@@ -24,7 +29,9 @@ export class UsersService {
       ],
     });
     if (user.length) {
-      throw new ConflictException('Пользователь с таким email или username уже зарегистрирован')
+      throw new ConflictException(
+        'Пользователь с таким email или username уже зарегистрирован',
+      );
     }
     createUserDTO.password = await bcrypt.hash(
       String(createUserDTO.password),
@@ -47,7 +54,7 @@ export class UsersService {
     const { password, ...user } = await this.userRepository.findOne({
       where: { id },
     });
-    if (!user) {
+    if (!user && !password) {
       throw new NotFoundException('Такого пользователя не существует');
     }
     return user;
@@ -86,7 +93,7 @@ export class UsersService {
   }
 
   async findWishes(username: string) {
-    const user = this.findOne(username)
+    const user = this.findOne(username);
     if (!user) {
       throw new NotFoundException('Пользователя не существует');
     }

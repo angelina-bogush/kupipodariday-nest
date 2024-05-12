@@ -1,33 +1,37 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne} from 'typeorm';
-import {  IsNumber, IsDecimal } from 'class-validator';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+} from 'typeorm';
+import { IsNumber, IsDecimal } from 'class-validator';
 import { Wish } from 'src/wishes/wish.entity';
 import { User } from 'src/users/user.entity';
 
-@Entity()
-
+@Entity('offer')
 export class Offer {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => User, (user) => user.offers)
-    @Column()
-    user: User
+  @ManyToOne(() => User, (user) => user.offers)
+  user: User;
 
-    @ManyToOne(() => Wish, (wish) => wish.offers)
-    @Column()
-    item: Wish
+  @ManyToOne(() => Wish, (wish) => wish.offers)
+  item: Wish;
 
-    @Column('decimal', { precision: 10, scale: 2 })
-    @IsNumber()
-    @IsDecimal({ decimal_digits: '2' })
-    amount: number
+  @Column('decimal', { precision: 10, scale: 2 })
+  @IsNumber()
+  @IsDecimal({ decimal_digits: '2' })
+  amount: number;
 
-    @Column({default: false})
-    hidden: boolean
+  @Column({ default: false })
+  hidden: boolean;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @CreateDateColumn()
+  createdAt: Date;
 
-    @UpdateDateColumn()
-    updatedAt: Date;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

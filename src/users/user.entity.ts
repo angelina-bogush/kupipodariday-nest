@@ -1,5 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { IsString, MinLength, IsEmail, MaxLength, IsUrl } from 'class-validator';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm';
+import {
+  IsString,
+  MinLength,
+  IsEmail,
+  MaxLength,
+  IsUrl,
+} from 'class-validator';
 import { Wish } from 'src/wishes/wish.entity';
 import { Offer } from 'src/offers/offer.entity';
 import { WishList } from 'src/wishlists/wishlist.entity';
@@ -32,13 +45,13 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Wish, wish => wish.owner)
+  @OneToMany(() => Wish, (wish) => wish.owner)
   wishes: Wish[];
 
-  @OneToMany(() => Offer, offer => offer.user)
+  @OneToMany(() => Offer, (offer) => offer.user)
   offers: Offer[];
 
-  @OneToMany(() => WishList, wishlist => wishlist.owner)
+  @OneToMany(() => WishList, (wishlist) => wishlist.owner)
   wishlists: WishList[];
 
   @CreateDateColumn()

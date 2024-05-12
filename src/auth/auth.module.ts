@@ -21,6 +21,12 @@ import { HashModule } from '../hash/hash.module';
     HashModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, LocalStrategy, JwtAuthGuard, LocalAuthGuard],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    LocalStrategy,
+    JwtAuthGuard,
+    LocalAuthGuard,
+  ],
 })
 export class AuthModule {}
